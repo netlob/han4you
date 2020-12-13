@@ -1,0 +1,33 @@
+class Outage {
+  String title;
+  String link;
+  String publicationDate;
+  String outageStatus;
+  String description;
+
+  Outage({
+    this.title,
+    this.link,
+    this.publicationDate,
+    this.outageStatus,
+    this.description,
+  });
+
+  Outage.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    link = json['link'];
+    publicationDate = json['publicationDate'];
+    outageStatus = json['outageStatus'];
+    description = json['description'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['title'] = this.title;
+    data['link'] = this.link;
+    data['publicationDate'] = this.publicationDate;
+    data['outageStatus'] = this.outageStatus;
+    data['description'] = this.description;
+    return data;
+  }
+}
