@@ -1,4 +1,4 @@
-class CacheItem {
+class GraphQLCacheItem {
   Map<String, dynamic> value;
   DateTime createdAt = DateTime.now();
   DateTime expiresAt = DateTime.now().add(
@@ -7,7 +7,7 @@ class CacheItem {
     ),
   );
 
-  CacheItem({this.value});
+  GraphQLCacheItem({this.value});
 
   bool isExpired() {
     return DateTime.now().isAfter(this.expiresAt);

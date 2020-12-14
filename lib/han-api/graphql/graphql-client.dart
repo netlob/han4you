@@ -1,12 +1,11 @@
-import 'dart:collection';
-import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-import 'cache-item.dart';
+import 'package:han4you/han-api/graphql/graphql-cache-item.dart';
+import 'package:http/http.dart' as http;
 
 class GraphQLClient {
   String apiUrl;
-  HashMap<String, CacheItem> queryCache = HashMap<String, CacheItem>();
+  Map<String, GraphQLCacheItem> queryCache = Map<String, GraphQLCacheItem>();
   int now = DateTime.now().microsecond;
 
   GraphQLClient({this.apiUrl});
@@ -19,21 +18,21 @@ class GraphQLClient {
         !queryCache[cacheId].isExpired();
     if (useCache) return queryCache[cacheId].value;
 
-    Map<String, String> finalVariables = variables == null ? {} : variables;
+    var finalVariables = variables == null ? {} : variables;
     http.Response response = await http.post(
       apiUrl,
-      headers: <String, String>{
+      headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: convert.jsonEncode(
-        <String, dynamic>{'query': query, 'variables': finalVariables},
+        {'query': query, 'variables': finalVariables},
       ),
     );
 
     if (response.statusCode != 200) throw response.body;
 
-    Map<String, dynamic> decodedBody = convert.jsonDecode(response.body);
-    queryCache[cacheId] = CacheItem(value: decodedBody);
+    var decodedBody = convert.jsonDecode(response.body);
+    queryCache[cacheId] = GraphQLCacheItem(value: decodedBody);
     return decodedBody;
   }
 

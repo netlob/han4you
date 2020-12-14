@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:han4you/components/design/typography-design.dart';
+import 'package:han4you/components/pages/outage-page.dart';
 import 'package:han4you/han-api/han-api.dart';
-import 'package:han4you/han-api/models/outage.dart';
+import 'package:han4you/han-api/models/han-outage.dart';
 
 class OutageList extends StatefulWidget {
   final String outageStatus;
@@ -12,19 +14,30 @@ class OutageList extends StatefulWidget {
 }
 
 class _OutageListState extends State<OutageList> {
-  Future<List<Outage>> _outagesFuture;
+  Future<List<HanOutage>> _outagesFuture;
 
-  ListView _buildList(List<Outage> outages) {
+  String _getOutageText() {
+    String text = widget.outageStatus == 'fixed'
+        ? 'opgeloste storingen'
+        : 'actieve storingen';
+    return text.toUpperCase();
+  }
+
+  ListView _buildList(List<HanOutage> outages) {
     return ListView.builder(
       itemCount: outages.length,
       itemBuilder: (BuildContext ctx, int index) {
-        Outage outage = outages[index];
+        HanOutage outage = outages[index];
         return ListTile(
           title: Text(outage.title),
           subtitle: Text('${outage.description.substring(0, 45)}...'),
           onTap: () => {
-            //TODO: Show actual outage
-            throw UnimplementedError()
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OutagePage(outage: outage),
+              ),
+            )
           },
         );
       },
@@ -39,9 +52,9 @@ class _OutageListState extends State<OutageList> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Outage>>(
+    return FutureBuilder<List<HanOutage>>(
       future: _outagesFuture,
-      builder: (BuildContext context, AsyncSnapshot<List<Outage>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<HanOutage>> snapshot) {
         if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
@@ -52,10 +65,25 @@ class _OutageListState extends State<OutageList> {
           );
         }
 
-        return MediaQuery.removePadding(
-          context: context,
-          removeTop: true,
-          child: _buildList(snapshot.data),
+        return Column(
+          children: [
+            Container(
+              height: 50,
+              child: Center(
+                child: Text(
+                  _getOutageText(),
+                  style: TypographyDesign.overline,
+                ),
+              ),
+            ),
+            Expanded(
+              child: MediaQuery.removePadding(
+                removeTop: true,
+                context: context,
+                child: _buildList(snapshot.data),
+              ),
+            ),
+          ],
         );
       },
     );

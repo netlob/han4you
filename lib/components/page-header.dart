@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:han4you/components/design/typography.dart';
+import 'package:han4you/components/design/typography-design.dart';
 
 class PageHeader extends StatelessWidget {
   final String title;
@@ -15,13 +15,13 @@ class PageHeader extends StatelessWidget {
         Center(
           child: Text(
             this.title,
-            style: TypographyStyles.title
+            style: TypographyDesign.title
           ),
         ),
         Center(
           child: Text(
             this.subtitle,
-            style: TypographyStyles.subtitle,
+            style: TypographyDesign.subtitle,
           ),
         ),
       ],

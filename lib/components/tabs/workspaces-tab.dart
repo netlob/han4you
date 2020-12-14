@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:han4you/components/building-list.dart';
 import 'package:han4you/components/page-header.dart';
 
-class WorkspacesPage extends StatefulWidget {
+class WorkspacesTab extends StatefulWidget {
   @override
-  _WorkspacesPageState createState() => _WorkspacesPageState();
+  _WorkspacesTabState createState() => _WorkspacesTabState();
 }
 
-class _WorkspacesPageState extends State<WorkspacesPage> {
+class _WorkspacesTabState extends State<WorkspacesTab> {
   @override
   Widget build(BuildContext context) {
     return Container(

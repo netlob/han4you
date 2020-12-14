@@ -1,13 +1,13 @@
-class Room {
+class HanRoom {
   String address;
   int available;
   String id;
   String name;
   int total;
 
-  Room({this.address, this.available, this.id, this.name, this.total});
+  HanRoom({this.address, this.available, this.id, this.name, this.total});
 
-  Room.fromJson(Map<String, dynamic> json) {
+  HanRoom.fromJson(Map<String, dynamic> json) {
     address = json['address'];
     available = json['available'];
     id = json['id'];

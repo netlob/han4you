@@ -1,7 +1,7 @@
 name: han4you
 description: Een moderne versie van de han4you app!
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 0.1.0+1
+version: 0.2.0+1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -10,6 +10,10 @@ dependencies:
   http: ^0.12.2
   webview_flutter: ^1.0.7
   crypto: ^2.1.5
+  url_launcher: ^5.7.10
+  intl: ^0.16.1
+  table_calendar: ^2.3.2
+  webview_cookie_manager: ^1.0.5
   flutter:
     sdk: flutter
 

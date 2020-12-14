@@ -1,11 +1,11 @@
-class Outage {
+class HanOutage {
   String title;
   String link;
   String publicationDate;
   String outageStatus;
   String description;
 
-  Outage({
+  HanOutage({
     this.title,
     this.link,
     this.publicationDate,
@@ -13,7 +13,7 @@ class Outage {
     this.description,
   });
 
-  Outage.fromJson(Map<String, dynamic> json) {
+  HanOutage.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     link = json['link'];
     publicationDate = json['publicationDate'];

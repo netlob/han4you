@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/components/outage-list.dart';
 import 'package:han4you/components/page-header.dart';
-import 'package:han4you/han-api/han-api.dart';
-import 'package:han4you/han-api/models/outage.dart';
 
-class OutagesPage extends StatefulWidget {
+class OutagesTab extends StatefulWidget {
   @override
-  _OutagesPageState createState() => _OutagesPageState();
+  _OutagesTabState createState() => _OutagesTabState();
 }
 
-class _OutagesPageState extends State<OutagesPage>
+class _OutagesTabState extends State<OutagesTab>
     with TickerProviderStateMixin {
   TabController _tabController;
-  Future<List<Outage>> _currentOutagesFuture;
-  Future<List<Outage>> _fixedOutagesFuture;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _currentOutagesFuture = HanApi.getOutages('current');
-    _fixedOutagesFuture = HanApi.getOutages('fixed');
   }
 
   @override

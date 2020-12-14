@@ -1,38 +1,36 @@
-import 'package:han4you/han-api/oauth/oauth.dart';
+import 'package:han4you/han-api/xedule/xedule-client.dart';
 
-import 'graphql/graphql.dart';
-import 'models/building.dart';
-import 'models/outage.dart';
+import 'graphql/graphql-client.dart';
+import 'han-config.dart';
+import 'models/han-building.dart';
+import 'models/han-outage.dart';
 
 class HanApi {
-  static String apiUrl = 'https://api2.han.nl/han4me-graphql/';
-  static GraphQLClient graphQl = GraphQLClient(apiUrl: apiUrl);
+  static GraphQLClient graphQl = GraphQLClient(apiUrl: HanConfig.graphqlApiUrl);
+  static XeduleClient xedule = XeduleClient(apiUrl: HanConfig.xeduleApiUrl);
 
-  static Future<List<Building>> getBuildings() async {
+  static Future<List<HanBuilding>> getBuildings() async {
     var res = await graphQl.query('{buildings {address available total}}');
-    List<Building> buildings = List<Building>();
 
+    List<HanBuilding> buildings = List<HanBuilding>();
     for (var building in res['data']['buildings']) {
-      buildings.add(Building.fromJson(building));
+      buildings.add(HanBuilding.fromJson(building));
     }
-
     return buildings;
   }
 
-  static Future<List<Outage>> getOutages(String outageStatus) async {
+  static Future<List<HanOutage>> getOutages(String outageStatus) async {
     var res = await graphQl.query(
       '{$outageStatus: outages(outageStatus: $outageStatus) {title link publicationDate outageStatus description}}',
     );
 
-    List<Outage> outages = List<Outage>();
-
     if (res['data'][outageStatus] == null)
       throw 'Outage status "$outageStatus" not found';
 
+    List<HanOutage> outages = List<HanOutage>();
     for (var outage in res['data'][outageStatus]) {
-      outages.add(Outage.fromJson(outage));
+      outages.add(HanOutage.fromJson(outage));
     }
-
     return outages;
   }
 }

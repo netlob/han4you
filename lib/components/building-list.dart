@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/han-api/han-api.dart';
-import 'package:han4you/han-api/models/building.dart';
+import 'package:han4you/han-api/models/han-building.dart';
+
+import 'pages/rooms-page.dart';
 
 class BuildingList extends StatefulWidget {
   @override
@@ -8,13 +10,13 @@ class BuildingList extends StatefulWidget {
 }
 
 class _BuildingListState extends State<BuildingList> {
-  Future<List<Building>> _buildingsFuture;
+  Future<List<HanBuilding>> _buildingsFuture;
 
-  ListView _buildList(List<Building> buildings) {
+  ListView _buildList(List<HanBuilding> buildings) {
     return ListView.builder(
       itemCount: buildings.length,
       itemBuilder: (BuildContext ctx, int index) {
-        Building building = buildings[index];
+        HanBuilding building = buildings[index];
         int available =
             building.available - (building.total - building.available);
         return ListTile(
@@ -26,6 +28,14 @@ class _BuildingListState extends State<BuildingList> {
           ),
           title: Text(building.address),
           subtitle: Text('$available beschikbaar'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RoomsPage(building: building),
+              ),
+            );
+          },
         );
       },
     );
@@ -39,9 +49,10 @@ class _BuildingListState extends State<BuildingList> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Building>>(
+    return FutureBuilder<List<HanBuilding>>(
       future: _buildingsFuture,
-      builder: (BuildContext context, AsyncSnapshot<List<Building>> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<List<HanBuilding>> snapshot) {
         if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }

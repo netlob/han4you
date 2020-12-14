@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TypographyStyles {
+class TypographyDesign {
   static TextStyle title = const TextStyle(
     fontSize: 45,
     fontWeight: FontWeight.bold,

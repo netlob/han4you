@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:han4you/han-api/han-api.dart';
-import 'package:han4you/han-api/models/building.dart';
-import 'package:han4you/han-api/models/room.dart';
+import 'package:han4you/han-api/models/han-building.dart';
+import 'package:han4you/han-api/models/han-room.dart';
 
 class RoomList extends StatefulWidget {
-  Building building;
+  final HanBuilding building;
 
   RoomList({@required this.building});
 
@@ -13,18 +12,16 @@ class RoomList extends StatefulWidget {
 }
 
 class _RoomListState extends State<RoomList> {
-  Future<List<Room>> _roomsFuture;
+  Future<List<HanRoom>> _roomsFuture;
 
-  ListView _buildList(List<Room> rooms) {
+  ListView _buildList(List<HanRoom> rooms) {
     return ListView.builder(
-      shrinkWrap: true,
       itemCount: rooms.length,
       itemBuilder: (BuildContext ctx, int index) {
-        Room room = rooms[index];
+        HanRoom room = rooms[index];
         return ListTile(
-          dense: true,
           title: Text(room.name),
-          subtitle: Text('${room.available} / ${room.total} beschikbaar'),
+          subtitle: Text('${room.available}/${room.total} kamers beschikbaar'),
         );
       },
     );
@@ -38,9 +35,9 @@ class _RoomListState extends State<RoomList> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Room>>(
+    return FutureBuilder<List<HanRoom>>(
       future: _roomsFuture,
-      builder: (BuildContext context, AsyncSnapshot<List<Room>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<HanRoom>> snapshot) {
         if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
@@ -51,7 +48,11 @@ class _RoomListState extends State<RoomList> {
           );
         }
 
-        return _buildList(snapshot.data);
+        return MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child: _buildList(snapshot.data),
+        );
       },
     );
   }

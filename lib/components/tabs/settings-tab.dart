@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/components/page-header.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsTab extends StatefulWidget {
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  _SettingsTabState createState() => _SettingsTabState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsTabState extends State<SettingsTab> {
   @override
   Widget build(BuildContext context) {
     return Container(
