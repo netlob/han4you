@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:han4you/components/design/color-design.dart';
-import 'package:han4you/components/tab-item.dart';
+import 'package:han4you/providers/settings-provider.dart';
+import 'package:han4you/view/tab/agenda-tab.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:provider/provider.dart';
 
-import 'components/tabs/agenda-tab.dart';
-import 'components/tabs/outages-tab.dart';
-import 'components/tabs/settings-tab.dart';
-import 'components/tabs/workspaces-tab.dart';
+import 'config.dart';
+import 'view/tab/outages-tab.dart';
+import 'view/tab/settings-tab.dart';
+import 'view/tab/workspaces-tab.dart';
 
-void main() {
-  initializeDateFormatting().then((_) => runApp(Han4You()));
+void main() async {
+  await initializeDateFormatting();
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => SettingsProvider())],
+      child: Han4You(),
+    ),
+  );
 }
 
 class Han4You extends StatelessWidget {
@@ -25,44 +32,28 @@ class App extends StatefulWidget {
 }
 
 class AppState extends State<App> {
-  static int activeTab = 0;
-
-  List<Widget> _pages = [
-    TabItem(tab: WorkspacesTab()),
-    TabItem(tab: AgendaTab()),
-    TabItem(tab: OutagesTab()),
-    TabItem(tab: SettingsTab()),
+  int _index = 0;
+  final _tabs = [
+    WorkspacesTab(),
+    AgendaTab(),
+    OutagesTab(),
+    SettingsTab(),
   ];
-
-  void _onTap(int index) {
-    setState(() {
-      activeTab = index;
-    });
-  }
-
-  @override
-  void initState() {
-    int index = 0;
-    for (TabItem page in _pages) {
-      page.index = index;
-      index++;
-    }
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'han4you',
-      theme: ThemeData(
-        primaryColor: ColorDesign.primaryColor,
-        accentColor: HSLColor.fromColor(ColorDesign.primaryColor)
-            .withLightness(0.55)
-            .toColor(),
-      ),
+      theme: AppConfig.lightTheme,
+      darkTheme: AppConfig.darkTheme,
+      themeMode: context.watch<SettingsProvider>().themeMode,
       home: Scaffold(
-        body: _pages[activeTab],
+        body: SafeArea(
+          child: IndexedStack(
+            index: _index,
+            children: _tabs,
+          ),
+        ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: [
@@ -83,8 +74,12 @@ class AppState extends State<App> {
               label: 'Instellingen',
             ),
           ],
-          currentIndex: activeTab,
-          onTap: _onTap,
+          currentIndex: _index,
+          onTap: (int index) {
+            setState(() {
+              _index = index;
+            });
+          },
         ),
       ),
     );
