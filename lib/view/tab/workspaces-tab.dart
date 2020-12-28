@@ -7,8 +7,13 @@ class WorkspacesTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Header(title: 'Werkplekken', subtitle: 'beschikbare werkplekken op de HAN'),
-        Expanded(child: BuildingList()),
+        Header(
+          title: 'Werkplekken',
+          subtitle: 'beschikbare werkplekken op de HAN',
+        ),
+        Expanded(
+          child: BuildingList(),
+        ),
       ],
     );
   }

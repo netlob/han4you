@@ -33,8 +33,10 @@ class OutagePage extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: Text(
-                    outage.description
-                        .replaceAll('[â¦]', '... (lees verder online)'),
+                    outage.description.replaceAll(
+                      '[â¦]',
+                      '... (lees verder online)',
+                    ),
                     style: TextStyle(fontSize: 16),
                   ),
                 ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/repository/graphql-repository.dart';
 import 'package:han4you/repository/models/graphql/building.dart';
+import 'package:han4you/view/page/room-page.dart';
+
+import 'room-list.dart';
 
 class BuildingList extends StatefulWidget {
   @override
@@ -39,6 +42,14 @@ class _BuildingListState extends State<BuildingList> {
             return ListTile(
               title: Text(building.address),
               subtitle: Text('$available beschikbaar'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RoomPage(building: building),
+                  ),
+                );
+              },
             );
           },
         );

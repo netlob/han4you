@@ -11,7 +11,9 @@ class _AgendaTabState extends State<AgendaTab> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Calendar(onDaySelected: (index) {}),
+        Calendar(
+          onDaySelected: (index) {},
+        ),
       ],
     );
   }

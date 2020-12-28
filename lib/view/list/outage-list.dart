@@ -44,11 +44,15 @@ class _BuildingListState extends State<OutageList> {
 
             return ListTile(
               title: Text(outage.title),
-              subtitle: Text(outage.description.substring(0, 50).trim() + '...'),
+              subtitle: Text(
+                outage.description.substring(0, 50).trim() + '...',
+              ),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => OutagePage(outage: outage)),
+                  MaterialPageRoute(
+                    builder: (context) => OutagePage(outage: outage),
+                  ),
                 );
               },
             );
