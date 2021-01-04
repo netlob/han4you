@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/providers/graphql/building-provider.dart';
 import 'package:han4you/providers/graphql/room-provider.dart';
-import 'package:han4you/providers/xedule-provider.dart';
+import 'package:han4you/providers/xedule/xedule-provider.dart';
 import 'package:han4you/view/pages/room-page.dart';
 import 'package:provider/provider.dart';
 

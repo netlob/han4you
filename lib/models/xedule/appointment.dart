@@ -1,20 +1,20 @@
 class Appointment {
+  String id;
   String name;
   String summary;
   String attention;
-  Null meetingInfo;
-  String iStart;
-  String iEnd;
+  String meetingInfo;
+  DateTime start;
+  DateTime end;
   List<int> atts;
-  String id;
 
   Appointment({
     this.name,
     this.summary,
     this.attention,
     this.meetingInfo,
-    this.iStart,
-    this.iEnd,
+    this.start,
+    this.end,
     this.atts,
     this.id,
   });
@@ -24,8 +24,8 @@ class Appointment {
     summary = json['summary'];
     attention = json['attention'];
     meetingInfo = json['meetingInfo'];
-    iStart = json['iStart'];
-    iEnd = json['iEnd'];
+    start = DateTime.parse(json['iStart']);
+    end = DateTime.parse(json['iEnd']);
     atts = json['atts'].cast<int>();
     id = json['id'];
   }
@@ -36,8 +36,8 @@ class Appointment {
     data['summary'] = this.summary;
     data['attention'] = this.attention;
     data['meetingInfo'] = this.meetingInfo;
-    data['iStart'] = this.iStart;
-    data['iEnd'] = this.iEnd;
+    data['iStart'] = this.start.toIso8601String();
+    data['iEnd'] = this.end.toIso8601String();
     data['atts'] = this.atts;
     data['id'] = this.id;
     return data;

@@ -14,7 +14,7 @@ class Commons {
   static final lightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: primaryLight,
-    accentColor: primaryLight.withOpacity(0.5),
+    accentColor: HSLColor.fromColor(primaryLight).withLightness(0.63).toColor(),
     primaryColorLight: primaryLight,
     indicatorColor: primaryLight,
     fontFamily: 'LexendDeca',
@@ -27,14 +27,14 @@ class Commons {
   static final darkTheme = ThemeData(
     brightness: Brightness.dark,
     primaryColor: primaryDark,
-    accentColor: primaryDark.withOpacity(0.5),
+    accentColor: HSLColor.fromColor(primaryDark).withLightness(0.63).toColor(),
     primaryColorLight: primaryDark,
     indicatorColor: primaryDark,
     toggleableActiveColor: primaryDark,
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      selectedItemColor: Colors.white,
-      backgroundColor: primaryDark,
-    ),
+    // bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    //   selectedItemColor: Colors.white,
+    //   backgroundColor: primaryDark,
+    // ),
     fontFamily: 'LexendDeca',
   );
 }

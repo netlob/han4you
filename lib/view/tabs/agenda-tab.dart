@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/api/xedule/xedule.dart';
-import 'package:han4you/providers/xedule-provider.dart';
+import 'package:han4you/providers/date-provider.dart';
+import 'package:han4you/providers/xedule/xedule-provider.dart';
 import 'package:han4you/providers/xedule/appointment-provider.dart';
+import 'package:han4you/view/appointment-list.dart';
 import 'package:han4you/view/xedule-auth.dart';
 import 'package:han4you/view/calendar.dart';
 import 'package:provider/provider.dart';
@@ -26,13 +28,17 @@ class _AgendaTabState extends State<AgendaTab> {
         children: [
           Calendar(
             onDaySelected: (date) {
-              context
-                  .read<AppointmentProvider>()
-                  .fetchAppointments(context, date);
+              final appointmentProvider = context.read<AppointmentProvider>();
+
+              context.read<DateProvider>().setDate(date);
+
+              if (appointmentProvider.appointments == null) {
+                appointmentProvider.fetchAppointments(context, date);
+              }
             },
           ),
           Expanded(
-            //child: AppointmentList(),
+            child: AppointmentList(),
           ),
         ],
       );

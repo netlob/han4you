@@ -6,7 +6,7 @@ import 'package:han4you/api/xedule/xedule-config.dart';
 import 'package:han4you/models/xedule/schedule.dart';
 import 'package:han4you/providers/xedule/group-provider.dart';
 import 'package:han4you/utils/commons.dart';
-import 'package:han4you/providers/xedule-provider.dart';
+import 'package:han4you/providers/xedule/xedule-provider.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';

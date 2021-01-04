@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:han4you/api/xedule/xedule.dart';
 import 'package:han4you/models/xedule/appointment.dart';
-import 'package:han4you/providers/xedule-provider.dart';
+import 'package:han4you/providers/xedule/xedule-provider.dart';
 import 'package:han4you/utils/helpers.dart';
 import 'package:provider/provider.dart';
 

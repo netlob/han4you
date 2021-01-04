@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/models/xedule/group.dart';
-import 'package:han4you/providers/xedule-provider.dart';
+import 'package:han4you/providers/xedule/xedule-provider.dart';
 import 'package:han4you/providers/xedule/group-provider.dart';
 import 'package:provider/provider.dart';
 

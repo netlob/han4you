@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:han4you/providers/xedule-provider.dart';
+import 'package:han4you/providers/date-provider.dart';
+import 'package:han4you/providers/xedule/xedule-provider.dart';
 import 'package:han4you/providers/settings-provider.dart';
 import 'package:han4you/providers/xedule/appointment-provider.dart';
 import 'package:han4you/providers/xedule/group-provider.dart';
@@ -22,7 +23,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => XeduleProvider()),
         ChangeNotifierProvider(create: (_) => GroupProvider()),
         ChangeNotifierProvider(create: (_) => OutageProvider()),
-        ChangeNotifierProvider(create: (_) => AppointmentProvider())
+        ChangeNotifierProvider(create: (_) => AppointmentProvider()),
+        ChangeNotifierProvider(create: (_) => DateProvider()),
       ],
       child: App(),
     ),
