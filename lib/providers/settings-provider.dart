@@ -24,5 +24,5 @@ class SettingsProvider extends ChangeNotifier {
     prefs.setBool("darkTheme", themeMode == ThemeMode.dark);
   }
 
-  ThemeMode get themeMode => _themeMode;
+  get themeMode => _themeMode;
 }

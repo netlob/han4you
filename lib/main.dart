@@ -1,29 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:han4you/providers/xedule-provider.dart';
 import 'package:han4you/providers/settings-provider.dart';
-import 'package:han4you/view/tab/agenda-tab.dart';
+import 'package:han4you/providers/xedule/appointment-provider.dart';
+import 'package:han4you/providers/xedule/group-provider.dart';
+import 'package:han4you/view/tabs/agenda-tab.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
-import 'config.dart';
-import 'view/tab/outages-tab.dart';
-import 'view/tab/settings-tab.dart';
-import 'view/tab/workspaces-tab.dart';
+import 'providers/graphql/outage-provider.dart';
+import 'utils/commons.dart';
+import 'view/tabs/outages-tab.dart';
+import 'view/tabs/settings-tab.dart';
+import 'view/tabs/workspaces-tab.dart';
 
 void main() async {
   await initializeDateFormatting();
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => SettingsProvider())],
-      child: Han4You(),
+      providers: [
+        ChangeNotifierProvider(create: (_) => SettingsProvider()),
+        ChangeNotifierProvider(create: (_) => XeduleProvider()),
+        ChangeNotifierProvider(create: (_) => GroupProvider()),
+        ChangeNotifierProvider(create: (_) => OutageProvider()),
+        ChangeNotifierProvider(create: (_) => AppointmentProvider())
+      ],
+      child: App(),
     ),
   );
-}
-
-class Han4You extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return App();
-  }
 }
 
 class App extends StatefulWidget {
@@ -44,8 +47,8 @@ class AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'han4you',
-      theme: AppConfig.lightTheme,
-      darkTheme: AppConfig.darkTheme,
+      theme: Commons.lightTheme,
+      darkTheme: Commons.darkTheme,
       themeMode: context.watch<SettingsProvider>().themeMode,
       home: Scaffold(
         body: SafeArea(

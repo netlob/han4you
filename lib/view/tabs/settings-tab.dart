@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/providers/settings-provider.dart';
 import 'package:han4you/view/header.dart';
+import 'package:han4you/view/lists/group-list.dart';
 import 'package:provider/provider.dart';
 
 class SettingsTab extends StatefulWidget {
@@ -24,11 +25,11 @@ class _SettingsTabState extends State<SettingsTab> {
           title: const Text('Donker thema'),
           onChanged: (value) {
             final themeMode = value ? ThemeMode.dark : ThemeMode.light;
-            Provider.of<SettingsProvider>(context, listen: false)
-                .setThemeMode(themeMode);
+            context.read<SettingsProvider>().setThemeMode(themeMode);
           },
           secondary: const Icon(Icons.color_lens_outlined),
-        )
+        ),
+        Expanded(child: GroupList()),
       ],
     );
   }

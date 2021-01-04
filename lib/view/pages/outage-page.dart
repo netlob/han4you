@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:han4you/repository/models/graphql/outage.dart';
+import 'package:han4you/models/graphql/outage.dart';
 import 'package:han4you/view/bar-button.dart';
 import 'package:han4you/view/header.dart';
 import 'package:url_launcher/url_launcher.dart';

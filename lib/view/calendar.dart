@@ -61,7 +61,9 @@ class _CalendarState extends State<Calendar> {
           "ga naar vandaag",
           onTap: () {
             setState(() {
-              _calendarController.setSelectedDay(DateTime.now());
+              DateTime date = DateTime.now();
+              _calendarController.setSelectedDay(date);
+              widget.onDaySelected(date);
             });
           },
         ),

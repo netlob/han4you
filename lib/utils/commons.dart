@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class AppConfig {
-  static const graphQLEndpoint = "https://api2.han.nl/han4me-graphql/";
-  static const xeduleEndpoint = "https://sa-han.xedule.nl/api/'";
+class Commons {
+  static const graphQLEndpoint = 'https://api2.han.nl/han4me-graphql/';
+  static const xeduleEndpoint = 'https://sa-han.xedule.nl/api/';
   static const xeduleSSOUrl =
-      "https://sa-han.xedule.nl/Authentication/sso/SSOLogin.aspx";
+      'https://sa-han.xedule.nl/Authentication/sso/SSOLogin.aspx';
 
   // waarom is de officiele HAN kleur zo moeilijk te integreren...
   // gebruik blauw voor nu

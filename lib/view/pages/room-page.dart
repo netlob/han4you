@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:han4you/repository/models/graphql/building.dart';
+import 'package:han4you/models/graphql/building.dart';
 import 'package:han4you/view/header.dart';
-import 'package:han4you/view/list/room-list.dart';
+import 'package:han4you/view/lists/room-list.dart';
 
 class RoomPage extends StatelessWidget {
   final Building building;
