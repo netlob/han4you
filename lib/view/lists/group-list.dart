@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:han4you/api/xedule/xedule.dart';
 import 'package:han4you/models/xedule/group.dart';
-import 'package:han4you/providers/xedule/xedule-provider.dart';
-import 'package:han4you/providers/xedule/group-provider.dart';
+import 'package:han4you/providers/xedule-provider.dart';
+import 'package:han4you/view/generic-future-builder.dart';
 import 'package:provider/provider.dart';
 
 class GroupList extends StatefulWidget {
@@ -10,24 +11,30 @@ class GroupList extends StatefulWidget {
 }
 
 class _GroupListState extends State<GroupList> {
-  String _filter = 'ita 1d';
+  Future<List<Group>> _groupsFuture;
+
+  @override
+  void initState() {
+    Xedule xedule = context.read<XeduleProvider>().xedule;
+    _groupsFuture = xedule.fetchGroups();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final xedule = context.watch<XeduleProvider>().xedule;
-    if (!xedule.config.authenticated) return Container(width: 0);
+    return GenericFutureBuilder<List<Group>>(
+      future: _groupsFuture,
+      builder: (groups) {
+        return ListView.builder(
+          itemCount: groups.length,
+          itemBuilder: (_, index) {
+            Group group = groups[index];
 
-    final provider = context.watch<GroupProvider>();
-    if (provider.loading) return Center(child: CircularProgressIndicator());
-
-    return ListView.builder(
-      itemCount: provider.groups.length,
-      itemBuilder: (_, index) {
-        final group = provider.groups[index];
-
-        return ListTile(
-          title: Text(group.code),
-          subtitle: Text(group.orus.join(',')),
+            return ListTile(
+              title: Text(group.code),
+              subtitle: Text('id: ${group.id} - orus: ${group.orus.join(',')}'),
+            );
+          },
         );
       },
     );

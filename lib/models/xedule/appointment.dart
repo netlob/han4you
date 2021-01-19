@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Appointment {
   String id;
   String name;
@@ -18,6 +20,11 @@ class Appointment {
     this.atts,
     this.id,
   });
+
+  static List<Appointment> decodeListFromBody(String body) {
+    final appointments = jsonDecode(body)[0]['apps'];
+    return appointments.map<Appointment>((json) => Appointment.fromJson(json)).toList();
+  }
 
   Appointment.fromJson(Map<String, dynamic> json) {
     name = json['name'];

@@ -4,14 +4,13 @@ import 'package:han4you/api/xedule/xedule.dart';
 import 'package:han4you/utils/commons.dart';
 
 class XeduleProvider extends ChangeNotifier {
-  Xedule xedule = Xedule(config: XeduleConfig());
-
-  XeduleProvider() {
-    print(xedule.config);
-  }
+  Xedule xedule = Xedule(
+    endpoint: Commons.xeduleEndpoint,
+    config: XeduleConfig()
+  );
 
   void setConfig(XeduleConfig config) {
-    this.xedule = Xedule(config: config, endpoint: Commons.xeduleEndpoint);
+    xedule.config = config;
     notifyListeners();
   }
 }

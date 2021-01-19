@@ -4,9 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:han4you/api/xedule/xedule-config.dart';
 import 'package:han4you/models/xedule/schedule.dart';
-import 'package:han4you/providers/xedule/group-provider.dart';
+import 'package:han4you/providers/xedule-provider.dart';
 import 'package:han4you/utils/commons.dart';
-import 'package:han4you/providers/xedule/xedule-provider.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -22,7 +21,7 @@ class _XeduleAuthState extends State<XeduleAuth> {
 
   // This method is run after xedule is initialized with a config.
   void _postAuthHook() {
-    context.read<GroupProvider>().fetchGroups(context);
+
   }
 
   @override
@@ -46,7 +45,7 @@ class _XeduleAuthState extends State<XeduleAuth> {
         List<Cookie> cookies = await _webViewCookieManager.getCookies(url);
         Cookie userId = cookies.singleWhere((c) => c.name == 'User');
         Cookie sessionId = cookies.singleWhere(
-          (c) => c.name == 'ASP.NET_SessionId',
+              (c) => c.name == 'ASP.NET_SessionId',
         );
 
         if (userId == null) throw 'no User found';
