@@ -5,6 +5,8 @@ class Group {
   String code;
   String id;
 
+  bool checked = false;
+
   Group({this.orus, this.code, this.id});
 
   static List<Group> decodeListFromBody(String body) {

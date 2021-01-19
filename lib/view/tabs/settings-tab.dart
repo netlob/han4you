@@ -10,6 +10,8 @@ class SettingsTab extends StatefulWidget {
 }
 
 class _SettingsTabState extends State<SettingsTab> {
+  String _filter = '';
+
   @override
   void initState() {
     super.initState();
@@ -29,7 +31,10 @@ class _SettingsTabState extends State<SettingsTab> {
           },
           secondary: const Icon(Icons.color_lens_outlined),
         ),
-        Expanded(child: GroupList()),
+        Divider(),
+        Expanded(
+          child: GroupList(filter: _filter),
+        ),
       ],
     );
   }
