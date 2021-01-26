@@ -9,43 +9,62 @@ import 'package:provider/provider.dart';
 class GroupList extends StatefulWidget {
   final String filter;
 
-  const GroupList({Key key, @required this.filter}) : super(key: key);
+  GroupList({Key key, @required this.filter}) : super(key: key);
 
   @override
   _GroupListState createState() => _GroupListState();
 }
 
 class _GroupListState extends State<GroupList> {
-  Future<List<Group>> _groupsFuture;
+  List<Group> _filteredGroups = [];
+  Future<List<Group>> _groupFuture;
+
+  bool _groupFilter(Group group) {
+    return group.code.toLowerCase().contains(widget.filter.toLowerCase());
+  }
+
+  bool _checkedFilter(Group group) {
+    return group.checked;
+  }
 
   @override
   void initState() {
     Xedule xedule = context.read<XeduleProvider>().xedule;
-    _groupsFuture = xedule.fetchGroups();
+    _groupFuture = xedule.fetchGroups();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    SettingsProvider settingsProvider = context.watch<SettingsProvider>();
+
     return GenericFutureBuilder<List<Group>>(
-      future: _groupsFuture,
+      future: _groupFuture,
       builder: (groups) {
+        _filteredGroups = groups.where(_groupFilter).toList();
+
         return ListView.builder(
-          itemCount: groups.length,
+          itemCount: _filteredGroups.length,
           itemBuilder: (_, index) {
-            Group group = groups[index];
+            Group group = _filteredGroups[index];
+
+            //TODO: yucky eww code fix pls
+            group.checked = settingsProvider.followingGroups.where((grp) => grp.code == group.code).length != 0;
 
             return CheckboxListTile(
               title: Text(group.code),
-              subtitle: Text('id: ${group.id} - orus: ${group.orus.join(',')}'),
+              subtitle: Text(
+                'id: ${group.id} - orus: ${group.orus.join(',')}',
+              ),
               value: group.checked,
               onChanged: (bool value) {
-                group.checked = value;
+                setState(() {
+                  group.checked = value;
+                });
 
-                // context.read<SettingsProvider>().updateFollowingGroups(
-                //     groups.where((group) => group.checked).toList());
-
-                setState(() {});
+                List<Group> selected =
+                    _filteredGroups.where(_checkedFilter).toList();
+                settingsProvider.updateFollowingGroups(selected);
               },
             );
           },

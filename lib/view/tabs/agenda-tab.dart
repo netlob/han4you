@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:han4you/api/exceptions/unauthenticated-exception.dart';
 import 'package:han4you/api/xedule/xedule.dart';
 import 'package:han4you/models/xedule/appointment.dart';
 import 'package:han4you/providers/xedule-provider.dart';
@@ -19,46 +20,65 @@ class _AgendaTabState extends State<AgendaTab> {
   DateTime _date = DateTime.now();
   int _weekNum = 0;
 
+  void _checkWeekRetrieval(BuildContext context) {
+    print(Helpers.weekNumber(_date));
+    print(_weekNum);
+    if (Helpers.weekNumber(_date) != _weekNum) {
+      _retrieveAppointments(context);
+    }
+  }
+
+  void _retrieveAppointments(BuildContext context) {
+    Xedule xedule = context.read<XeduleProvider>().xedule;
+    
+    _weekNum = Helpers.weekNumber(_date);
+    _appointmentsFuture = xedule.fetchAppointments(_date);
+    _appointmentsFuture.catchError((exception) {
+      if (exception is UnauthenticatedException) {
+        context.read<XeduleProvider>().setAuthenticated(false);
+      }
+    });
+  }
+
   @override
   void initState() {
-    Xedule xedule = context.read<XeduleProvider>().xedule;
-    _appointmentsFuture = xedule.fetchAppointments(_date);
-    _weekNum = Helpers.weekNumber(_date);
-
+    _checkWeekRetrieval(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Xedule xedule = context.watch<XeduleProvider>().xedule;
+    bool authenticated = context.watch<XeduleProvider>().authenticated;
 
-    if (xedule.config.authenticated) {
+    if (authenticated) {
       return Column(
         children: [
           Calendar(
             onDaySelected: (date) {
-              _date = date;
-              int newWeekNum = Helpers.weekNumber(_date);
+              setState(() {
+                _date = date;
+              });
 
-              if (newWeekNum != _weekNum) {
-                _weekNum = newWeekNum;
-                _appointmentsFuture = xedule.fetchAppointments(_date);
-              }
-
-              setState(() {});
+              _checkWeekRetrieval(context);
             },
           ),
           Expanded(
             child: GenericFutureBuilder<List<Appointment>>(
               future: _appointmentsFuture,
-              builder: (appointments) =>
-                  Appointments(appointments: appointments, date: _date),
+              builder: (appointments) => Appointments(
+                appointments: appointments,
+                date: _date,
+              ),
             ),
           ),
         ],
       );
     }
 
-    return XeduleAuth();
+    return XeduleAuth(onAuthenticated: () {
+      setState(() {
+        _retrieveAppointments(context);
+      });
+    });
   }
 }

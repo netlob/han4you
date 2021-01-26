@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:han4you/api/exceptions/unauthenticated-exception.dart';
 import 'package:han4you/models/xedule/appointment.dart';
 import 'package:han4you/models/xedule/group.dart';
 import 'package:han4you/models/xedule/year.dart';
@@ -13,21 +14,13 @@ class Xedule {
 
   Xedule({this.endpoint, this.config});
 
-  Future waitForAuth() async {
-    while(true) {
-      await Future.delayed(Duration(seconds: 1));
-      if(config.authenticated) return;
-    }
-  }
-
   Future<String> get(String url) async {
-    await waitForAuth();
-
     final headers = {
       'Cookie': 'ASP.NET_SessionId=${config.sessionId}; User=${config.userId}'
     };
 
     final res = await http.get(endpoint + url, headers: headers);
+    if(res.body == '') throw UnauthenticatedException('no response body');
     return res.body;
   }
 

@@ -26,7 +26,7 @@ class SettingsProvider extends ChangeNotifier {
     prefs.setBool("darkTheme", themeMode == ThemeMode.dark);
   }
 
-  updateFollowingGroups(List<Group> groups) {
+  void updateFollowingGroups(List<Group> groups) {
     followingGroups = groups;
     notifyListeners();
   }

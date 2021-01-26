@@ -32,17 +32,11 @@ class _AppointmentsState extends State<Appointments> {
         textStyle: TextStyle(
           fontFamily: 'LexendDeca',
         ),
-        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
         decoration: BoxDecoration(
           color: Theme.of(context).accentColor,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).shadowColor.withOpacity(0.05),
-              spreadRadius: 2,
-              blurRadius: 5,
-            ),
-          ],
+        ),
+        margin: EdgeInsets.symmetric(
+          vertical: 2.5,
         ),
       );
     }).toList();
@@ -67,9 +61,18 @@ class _AppointmentsState extends State<Appointments> {
       date: widget.date,
       events: events,
       hoursColumnStyle: HoursColumnStyle(
-        color: Theme.of(context).canvasColor,
         textStyle: TextStyle(
           color: const Color(0xFF616161),
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).canvasColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.25),
+              spreadRadius: 1,
+              blurRadius: 5,
+            ),
+          ],
         ),
       ),
       style: DayViewStyle(

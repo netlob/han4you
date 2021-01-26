@@ -6,6 +6,4 @@ class XeduleConfig {
   List<Schedule> schedules;
 
   XeduleConfig({this.userId, this.sessionId, this.schedules});
-
-  bool get authenticated => sessionId != null && userId != null;
 }

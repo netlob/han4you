@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+typedef void ErrorCallback(Exception exception);
 typedef Widget DataBuilder<T>(T data);
 
 class GenericFutureBuilder<T> extends StatelessWidget {
