@@ -56,6 +56,7 @@ class _CalendarState extends State<Calendar> {
           onDaySelected: (date, _, __) {
             widget.onDaySelected(date);
           },
+          startingDayOfWeek: StartingDayOfWeek.monday,
         ),
         BarButton(
           "ga naar vandaag",

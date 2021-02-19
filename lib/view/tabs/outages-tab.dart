@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:han4you/providers/graphql/outage-provider.dart';
 import 'package:han4you/view/lists/outage-list.dart';
 import 'package:han4you/view/header.dart';
-import 'package:provider/provider.dart';
 
 class OutagesTab extends StatefulWidget {
   @override

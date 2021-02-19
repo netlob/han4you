@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Outage {
   String title;
   String link;
@@ -12,6 +14,13 @@ class Outage {
     this.outageStatus,
     this.description,
   });
+
+  static List<Outage> decodeListFromBody(String body) {
+    final json = jsonDecode(body);
+    final outages = json['data']['outages'];
+
+    return outages.map<Outage>((json) => Outage.fromJson(json)).toList();
+  }
 
   Outage.fromJson(Map<String, dynamic> json) {
     title = json['title'];

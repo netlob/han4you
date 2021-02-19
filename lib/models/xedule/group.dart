@@ -1,9 +1,18 @@
+import 'dart:convert';
+
 class Group {
   List<int> orus;
   String code;
   String id;
 
+  bool selected = false;
+
   Group({this.orus, this.code, this.id});
+
+  static List<Group> decodeListFromBody(String body) {
+    final groups = jsonDecode(body);
+    return groups.map<Group>((json) => Group.fromJson(json)).toList();
+  }
 
   Group.fromJson(Map<String, dynamic> json) {
     orus = json['orus'].cast<int>();

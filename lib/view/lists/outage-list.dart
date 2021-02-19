@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:han4you/providers/graphql/outage-provider.dart';
+import 'package:han4you/api/graphql/graphql.dart';
+import 'package:han4you/models/graphql/outage.dart';
+import 'package:han4you/providers/graphql-provider.dart';
+import 'package:han4you/view/generic-future-builder.dart';
 import 'package:han4you/view/pages/outage-page.dart';
 import 'package:provider/provider.dart';
 
@@ -13,33 +16,38 @@ class OutageList extends StatefulWidget {
 }
 
 class _BuildingListState extends State<OutageList> {
+  Future<List<Outage>> _outagesFuture;
+
   @override
   void initState() {
-    context.read<OutageProvider>().fetchOutages(widget.status);
+    GraphQL graphql = context.read<GraphQLProvider>().graphql;
+    _outagesFuture = graphql.fetchOutages(widget.status);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<OutageProvider>();
-    if (provider.loading) return Center(child: CircularProgressIndicator());
+    return GenericFutureBuilder<List<Outage>>(
+      future: _outagesFuture,
+      builder: (outages) {
+        return ListView.builder(
+          itemCount: outages.length,
+          itemBuilder: (_, index) {
+            final outage = outages[index];
+            final description =
+                outage.description.substring(0, 50).trim() + '...';
 
-    final outages = provider.outages[widget.status];
-    return ListView.builder(
-      itemCount: outages.length,
-      itemBuilder: (_, index) {
-        final outage = outages[index];
-        final description = outage.description.substring(0, 50).trim() + '...';
-
-        return ListTile(
-          title: Text(outage.title),
-          subtitle: Text(description),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => OutagePage(outage: outage),
-              ),
+            return ListTile(
+              title: Text(outage.title),
+              subtitle: Text(description),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OutagePage(outage: outage),
+                  ),
+                );
+              },
             );
           },
         );

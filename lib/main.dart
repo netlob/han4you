@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:han4you/providers/date-provider.dart';
-import 'package:han4you/providers/xedule/xedule-provider.dart';
-import 'package:han4you/providers/settings-provider.dart';
-import 'package:han4you/providers/xedule/appointment-provider.dart';
-import 'package:han4you/providers/xedule/group-provider.dart';
-import 'package:han4you/view/tabs/agenda-tab.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:han4you/providers/group-provider.dart';
+import 'package:han4you/providers/period-provider.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-import 'providers/graphql/outage-provider.dart';
-import 'utils/commons.dart';
+import 'providers/graphql-provider.dart';
+import 'providers/settings-provider.dart';
+import 'providers/xedule-provider.dart';
+
+import 'view/tabs/agenda-tab.dart';
 import 'view/tabs/outages-tab.dart';
 import 'view/tabs/settings-tab.dart';
 import 'view/tabs/workspaces-tab.dart';
+
+import 'utils/commons.dart';
 
 void main() async {
   await initializeDateFormatting();
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => SettingsProvider()),
+        ChangeNotifierProvider(create: (_) => GraphQLProvider()),
         ChangeNotifierProvider(create: (_) => XeduleProvider()),
+        ChangeNotifierProvider(create: (_) => SettingsProvider()),
+        ChangeNotifierProvider(create: (_) => PeriodProvider()),
         ChangeNotifierProvider(create: (_) => GroupProvider()),
-        ChangeNotifierProvider(create: (_) => OutageProvider()),
-        ChangeNotifierProvider(create: (_) => AppointmentProvider()),
-        ChangeNotifierProvider(create: (_) => DateProvider()),
       ],
       child: App(),
     ),
@@ -53,12 +53,7 @@ class AppState extends State<App> {
       darkTheme: Commons.darkTheme,
       themeMode: context.watch<SettingsProvider>().themeMode,
       home: Scaffold(
-        body: SafeArea(
-          child: IndexedStack(
-            index: _index,
-            children: _tabs,
-          ),
-        ),
+        body: SafeArea(child: _tabs[_index]),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: [

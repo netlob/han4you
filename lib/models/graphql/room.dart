@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Room {
   String address;
   int available;
@@ -6,6 +8,12 @@ class Room {
   int total;
 
   Room({this.address, this.available, this.id, this.name, this.total});
+
+  static List<Room> decodeListFromBody(String body) {
+    final json = jsonDecode(body);
+    final rooms = json['data']['rooms'];
+    return rooms.map<Room>((json) => Room.fromJson(json)).toList();
+  }
 
   Room.fromJson(Map<String, dynamic> json) {
     address = json['address'];
