@@ -6,11 +6,13 @@ typedef Widget DataBuilder<T>(T data);
 class GenericFutureBuilder<T> extends StatelessWidget {
   final Future<T> future;
   final DataBuilder<T> builder;
+  final DataBuilder<Object> errorBuilder;
 
   const GenericFutureBuilder({
     Key key,
     @required this.future,
     @required this.builder,
+    this.errorBuilder
   }) : super(key: key);
 
   @override

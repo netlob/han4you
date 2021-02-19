@@ -1,21 +1,21 @@
 import 'dart:convert';
 
-class Year {
+class Period {
   int oru;
   int year;
   List<int> schs;
   int periodCount;
   bool hasCalendar;
   String cal;
+  String dayStart;
+  String dayEnd;
   DateTime start;
   DateTime end;
-  DateTime dayStart;
-  DateTime dayEnd;
   int firstDayOfWeek;
   int lastDayOfWeek;
   String id;
 
-  Year({
+  Period({
     this.oru,
     this.year,
     this.schs,
@@ -31,12 +31,12 @@ class Year {
     this.id,
   });
 
-  static List<Year> decodeListFromBody(String body) {
+  static List<Period> decodeListFromBody(String body) {
     final years = jsonDecode(body);
-    return years.map<Year>((json) => Year.fromJson(json)).toList();
+    return years.map<Period>((json) => Period.fromJson(json)).toList();
   }
 
-  Year.fromJson(Map<String, dynamic> json) {
+  Period.fromJson(Map<String, dynamic> json) {
     oru = json['oru'];
     year = json['year'];
     schs = json['schs'].cast<int>();
@@ -45,8 +45,8 @@ class Year {
     cal = json['cal'];
     start = DateTime.parse(json['iStart']);
     end = DateTime.parse(json['iEnd']);
-    dayStart = DateTime.parse(json['iStartOfDay']);
-    dayEnd = DateTime.parse(json['iEndOfDay']);
+    dayStart = json['iStartOfDay'];
+    dayEnd = json['iEndOfDay'];
     firstDayOfWeek = json['firstDayOfWeek'];
     lastDayOfWeek = json['lastDayOfWeek'];
     id = json['id'];
@@ -62,8 +62,8 @@ class Year {
     data['cal'] = this.cal;
     data['iStart'] = this.start.toIso8601String();
     data['iEnd'] = this.end.toIso8601String();
-    data['iStartOfDay'] = this.dayStart.toIso8601String();
-    data['iEndOfDay'] = this.dayEnd.toIso8601String();
+    data['iStartOfDay'] = this.dayStart;
+    data['iEndOfDay'] = this.dayEnd;
     data['firstDayOfWeek'] = this.firstDayOfWeek;
     data['lastDayOfWeek'] = this.lastDayOfWeek;
     data['id'] = this.id;

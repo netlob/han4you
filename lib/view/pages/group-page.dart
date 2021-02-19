@@ -18,7 +18,6 @@ class _GroupPageState extends State<GroupPage> {
         onPressed: () {
           Navigator.pop(context);
         },
-        backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.white,
       ),
       body: SafeArea(

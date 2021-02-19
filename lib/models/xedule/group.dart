@@ -5,7 +5,7 @@ class Group {
   String code;
   String id;
 
-  bool checked = false;
+  bool selected = false;
 
   Group({this.orus, this.code, this.id});
 

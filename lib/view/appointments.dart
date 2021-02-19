@@ -41,6 +41,8 @@ class _AppointmentsState extends State<Appointments> {
       );
     }).toList();
 
+    print(widget.appointments);
+
     bool dayEmpty = true;
     for (FlutterWeekViewEvent event in events) {
       if (event.start.day == widget.date.day &&

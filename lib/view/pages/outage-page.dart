@@ -17,7 +17,6 @@ class OutagePage extends StatelessWidget {
         onPressed: () {
           Navigator.pop(context);
         },
-        backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.white,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

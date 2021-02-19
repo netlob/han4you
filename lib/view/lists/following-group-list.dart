@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/models/xedule/group.dart';
-import 'package:han4you/providers/settings-provider.dart';
+import 'package:han4you/providers/group-provider.dart';
 import 'package:provider/provider.dart';
 
 class FollowingGroupList extends StatefulWidget {
@@ -11,7 +11,8 @@ class FollowingGroupList extends StatefulWidget {
 class _FollowingGroupListState extends State<FollowingGroupList> {
   @override
   Widget build(BuildContext context) {
-    List<Group> groups = context.watch<SettingsProvider>().followingGroups;
+    GroupProvider groupProvider = context.watch<GroupProvider>();
+    List<Group> groups = groupProvider.selectedGroups;
 
     return ListView.builder(
       itemCount: groups.length,
@@ -22,8 +23,7 @@ class _FollowingGroupListState extends State<FollowingGroupList> {
           key: Key(group.code),
           onDismissed: (_) {
             setState(() {
-              groups.removeAt(index);
-              context.read<SettingsProvider>().updateFollowingGroups(groups);
+              groupProvider.removeSelectedGroup(group);
             });
           },
           child: ListTile(

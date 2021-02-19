@@ -22,12 +22,20 @@ class Appointment {
   });
 
   static List<Appointment> decodeListFromBody(String body) {
-    final response = jsonDecode(body)[0];
-    if(response == null) return [];
+    List<Appointment> appointments = [];
+    final json = jsonDecode(body);
 
-    final apps = response['apps'];
-    if(apps == null) return [];
-    return apps.map<Appointment>((json) => Appointment.fromJson(json)).toList();
+    for (dynamic response in json) {
+      if (response == null) continue;
+
+      final apps = response['apps'];
+      if (apps == null) return [];
+      appointments.addAll(
+        apps.map<Appointment>((json) => Appointment.fromJson(json)).toList(),
+      );
+    }
+
+    return appointments;
   }
 
   Appointment.fromJson(Map<String, dynamic> json) {
