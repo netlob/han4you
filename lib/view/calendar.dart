@@ -1,30 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:han4you/providers/agenda-provider.dart';
+import 'package:han4you/utils/helpers.dart';
 import 'package:han4you/view/bar-button.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:time_machine/time_machine.dart';
 
 typedef void OnDaySelected(DateTime date);
 
 class Calendar extends StatefulWidget {
-  final OnDaySelected onDaySelected;
-
-  Calendar({@required this.onDaySelected});
-
   @override
   _CalendarState createState() => _CalendarState();
 }
 
 class _CalendarState extends State<Calendar> {
+  AgendaProvider _agendaProvider;
   CalendarController _calendarController;
+
+  void _onDateChanged() {
+    setState(() {
+      _calendarController.setSelectedDay(
+        _agendaProvider.date.toDateTimeUnspecified(),
+      );
+    });
+  }
 
   @override
   void initState() {
-    super.initState();
+    _agendaProvider = context.read<AgendaProvider>();
     _calendarController = CalendarController();
+    _agendaProvider.addListener(_onDateChanged);
+
+    super.initState();
   }
 
   @override
   void dispose() {
     _calendarController.dispose();
+    _agendaProvider.removeListener(_onDateChanged);
     super.dispose();
   }
 
@@ -54,18 +67,14 @@ class _CalendarState extends State<Calendar> {
           weekendDays: [],
           initialCalendarFormat: CalendarFormat.week,
           onDaySelected: (date, _, __) {
-            widget.onDaySelected(date);
+            _agendaProvider.setDate(Helpers.localDate(date));
           },
           startingDayOfWeek: StartingDayOfWeek.monday,
         ),
         BarButton(
           "ga naar vandaag",
           onTap: () {
-            setState(() {
-              DateTime date = DateTime.now();
-              _calendarController.setSelectedDay(date);
-              widget.onDaySelected(date);
-            });
+            _agendaProvider.setDate(LocalDate.today());
           },
         ),
       ],

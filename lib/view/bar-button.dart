@@ -9,7 +9,7 @@ class BarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Theme.of(context).accentColor,
+      color: Theme.of(context).primaryColor,
       child: Ink(
         height: 50,
         child: InkWell(

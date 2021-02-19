@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:han4you/providers/group-provider.dart';
 import 'package:han4you/view/header.dart';
 import 'package:han4you/view/lists/group-list.dart';
+import 'package:provider/provider.dart';
 
 class GroupPage extends StatefulWidget {
   @override
@@ -12,9 +14,12 @@ class _GroupPageState extends State<GroupPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool selectedGroups =
+        context.watch<GroupProvider>().selectedGroups.length != 0;
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.arrow_back),
+        child: selectedGroups ? Icon(Icons.check) : Icon(Icons.arrow_back),
         onPressed: () {
           Navigator.pop(context);
         },

@@ -1,7 +1,7 @@
 name: han4you
 description: Een moderne versie van de han4you app!
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 0.6.1+1
+version: 0.7.2+1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -12,10 +12,11 @@ dependencies:
   url_launcher: ^5.7.10
   webview_flutter: ^1.0.7
   webview_cookie_manager: ^1.0.5
-  flutter_week_view: ^1.0.0+2
   table_calendar: ^2.3.2
   provider: ^4.3.2+3
   shared_preferences: ^0.5.12+4
+  time_machine: ^0.9.16
+  timetable: ^0.2.9
   flutter:
     sdk: flutter
 
@@ -25,6 +26,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - packages/time_machine/data/cultures/cultures.bin
+    - packages/time_machine/data/tzdb/tzdb.bin
   fonts:
     - family: LexendDeca
       fonts:

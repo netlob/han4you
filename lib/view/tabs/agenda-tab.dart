@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/api/exceptions/unauthenticated-exception.dart';
-import 'package:han4you/models/xedule/appointment.dart';
+import 'package:han4you/providers/agenda-provider.dart';
 import 'package:han4you/providers/group-provider.dart';
 import 'package:han4you/providers/period-provider.dart';
 import 'package:han4you/providers/xedule-provider.dart';
 import 'package:han4you/utils/helpers.dart';
 import 'package:han4you/view/appointments.dart';
-import 'package:han4you/view/generic-future-builder.dart';
 import 'package:han4you/view/header.dart';
 import 'package:han4you/view/pages/auth-page.dart';
 import 'package:han4you/view/calendar.dart';
+import 'package:han4you/view/pages/group-page.dart';
 import 'package:provider/provider.dart';
+import 'package:time_machine/time_machine.dart';
 
 class AgendaTab extends StatefulWidget {
   @override
@@ -18,93 +19,99 @@ class AgendaTab extends StatefulWidget {
 }
 
 class _AgendaTabState extends State<AgendaTab> {
-  Future<List<Appointment>> _appointmentsFuture;
-  DateTime _date = DateTime.now();
+  XeduleProvider _xeduleProvider;
+  AgendaProvider _agendaProvider;
+  GroupProvider _groupProvider;
+  PeriodProvider _periodProvider;
+
   int _weekNum = 0;
 
-  void _checkWeekRetrieval(BuildContext context) {
-    if (Helpers.weekNumber(_date) != _weekNum) {
-      _retrieveAppointments(context);
-    }
-  }
+  void _retrieveAppointments() {
+    print("checking appointments");
+    LocalDate date = _agendaProvider.date;
+    if (Helpers.weekNumber(date) == _weekNum) return;
 
-  void _retrieveAppointments(BuildContext context) {
-    PeriodProvider calendarProvider = context.read<PeriodProvider>();
-    GroupProvider groupProvider = context.read<GroupProvider>();
-    XeduleProvider xeduleProvider = context.read<XeduleProvider>();
-
-    _weekNum = Helpers.weekNumber(_date);
-    _appointmentsFuture = xeduleProvider.xedule.fetchAppointments(
-      groupProvider.selectedGroups,
-      calendarProvider.periods,
-      _date,
+    _weekNum = Helpers.weekNumber(date);
+    final appointmentFuture = _xeduleProvider.xedule.fetchAppointments(
+      _groupProvider.selectedGroups,
+      _periodProvider.periods,
+      date,
     );
 
-    _appointmentsFuture.catchError((exception) {
+    appointmentFuture.then((appointments) {
+      _agendaProvider.setAppointments(appointments);
+      return;
+    }).catchError((exception) {
       if (exception is UnauthenticatedException) {
-        context.read<XeduleProvider>().setAuthenticated(false);
+        _xeduleProvider.setAuthenticated(false);
       }
     });
   }
 
+  void _openPage(Widget page) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => page,
+      ),
+    );
+  }
+
   @override
   void initState() {
-    bool authenticated = context.read<XeduleProvider>().authenticated;
+    _xeduleProvider = context.read<XeduleProvider>();
+    _agendaProvider = context.read<AgendaProvider>();
+    _groupProvider = context.read<GroupProvider>();
+    _periodProvider = context.read<PeriodProvider>();
 
-    if (authenticated) {
-      _checkWeekRetrieval(context);
-    }
-
+    _agendaProvider.addListener(_retrieveAppointments);
+    _groupProvider.addListener(_retrieveAppointments);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _agendaProvider.removeListener(_retrieveAppointments);
+    _groupProvider.removeListener(_retrieveAppointments);
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     bool authenticated = context.watch<XeduleProvider>().authenticated;
+    bool groupsSelected =
+        context.watch<GroupProvider>().selectedGroups.length != 0;
 
-    if (!authenticated) {
+    if (groupsSelected) {
       return Column(
         children: [
-          Header(title: 'Agenda', subtitle: 'log in om door te gaan'),
-          FractionallySizedBox(
-            widthFactor: 0.75,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AuthPage()),
-                );
-              },
-              icon: Icon(Icons.login),
-              label: Text('Log in met HAN'),
-            ),
-          )
+          Calendar(),
+          Expanded(
+            child: Appointments(),
+          ),
         ],
       );
     }
 
     return Column(
       children: [
-        Calendar(
-          onDaySelected: (date) {
-            setState(() {
-              _date = date;
-            });
-
-            _checkWeekRetrieval(context);
-          },
-        ),
-        Expanded(
-          child: GenericFutureBuilder<List<Appointment>>(
-            future: _appointmentsFuture,
-            builder: (appointments) {
-              return Appointments(
-                appointments: appointments,
-                date: _date,
-              );
-            },
+        Header(title: 'Agenda', subtitle: 'volg de stappen om door te gaan'),
+        FractionallySizedBox(
+          widthFactor: 0.75,
+          child: ElevatedButton.icon(
+            label: Text('log in met HAN'),
+            icon: Icon(Icons.login),
+            onPressed: authenticated ? null : () => _openPage(AuthPage()),
           ),
         ),
+        FractionallySizedBox(
+          widthFactor: 0.75,
+          child: ElevatedButton.icon(
+            label: Text('Selecteer groepen'),
+            icon: Icon(Icons.group),
+            onPressed: !authenticated ? null : () => _openPage(GroupPage()),
+          ),
+        )
       ],
     );
   }
