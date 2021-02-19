@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:han4you/providers/agenda-provider.dart';
 import 'package:han4you/providers/group-provider.dart';
 import 'package:han4you/providers/period-provider.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:time_machine/time_machine.dart';
 
 import 'providers/graphql-provider.dart';
 import 'providers/settings-provider.dart';
@@ -16,7 +19,10 @@ import 'view/tabs/workspaces-tab.dart';
 import 'utils/commons.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await TimeMachine.initialize({'rootBundle': rootBundle});
   await initializeDateFormatting();
+  
   runApp(
     MultiProvider(
       providers: [
@@ -25,6 +31,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
         ChangeNotifierProvider(create: (_) => PeriodProvider()),
         ChangeNotifierProvider(create: (_) => GroupProvider()),
+        ChangeNotifierProvider(create: (_) => AgendaProvider())
       ],
       child: App(),
     ),

@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:han4you/api/exceptions/cookie-not-found-exception.dart';
 import 'package:han4you/api/xedule/xedule-config.dart';
-import 'package:han4you/providers/group-provider.dart';
 import 'package:han4you/providers/period-provider.dart';
 import 'package:han4you/providers/xedule-provider.dart';
 import 'package:han4you/utils/commons.dart';
-import 'package:han4you/view/pages/group-page.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -69,19 +67,9 @@ class _AuthPageState extends State<AuthPage> {
 
             PeriodProvider periodProvider = context.read<PeriodProvider>();
             XeduleProvider xeduleProvider = context.read<XeduleProvider>();
-            GroupProvider groupProvider = context.read<GroupProvider>();
             xeduleProvider.setConfig(config);
 
             Navigator.pop(context);
-
-            if(groupProvider.selectedGroups.length == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => GroupPage(),
-                ),
-              );
-            }
 
             xeduleProvider.xedule.fetchPeriods().then((periods) {
               periodProvider.setPeriods(periods);

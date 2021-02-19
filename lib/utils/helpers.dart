@@ -1,8 +1,8 @@
-import 'package:intl/intl.dart';
+import 'package:time_machine/time_machine.dart';
 
 class Helpers {
-  static int weekNumber(DateTime date) {
-    int dayOfYear = int.parse(DateFormat("D").format(date));
-    return ((dayOfYear - date.weekday + 10) / 7).floor();
+  static int weekNumber(LocalDate date) {
+    int dayOfYear = date.dayOfYear;
+    return ((dayOfYear - date.dayOfWeek.value + 10) / 7).floor();
   }
 }

@@ -5,6 +5,7 @@ import 'package:han4you/models/xedule/group.dart';
 import 'package:han4you/models/xedule/period.dart';
 import 'package:han4you/utils/helpers.dart';
 import 'package:http/http.dart' as http;
+import 'package:time_machine/time_machine.dart' as time_machine;
 
 import 'xedule-config.dart';
 
@@ -24,7 +25,7 @@ class Xedule {
     return res.body;
   }
 
-  Future<List<Appointment>> fetchAppointments(List<Group> groups, List<Period> periods, DateTime date) async {
+  Future<List<Appointment>> fetchAppointments(List<Group> groups, List<Period> periods, time_machine.LocalDate date) async {
     int weekNum = Helpers.weekNumber(date);
 
     String ids = '';
