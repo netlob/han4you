@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/providers/agenda-provider.dart';
+import 'package:han4you/utils/helpers.dart';
 import 'package:han4you/view/bar-button.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -66,7 +67,7 @@ class _CalendarState extends State<Calendar> {
           weekendDays: [],
           initialCalendarFormat: CalendarFormat.week,
           onDaySelected: (date, _, __) {
-            _agendaProvider.setDate(LocalDate.dateTime(date));
+            _agendaProvider.setDate(Helpers.localDate(date));
           },
           startingDayOfWeek: StartingDayOfWeek.monday,
         ),

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:han4you/utils/helpers.dart';
 import 'package:time_machine/time_machine.dart';
-import 'package:time_machine/time_machine_text_patterns.dart';
 
 class Appointment {
   String id;
@@ -42,12 +42,13 @@ class Appointment {
   }
 
   Appointment.fromJson(Map<String, dynamic> json) {
+
     name = json['name'];
     summary = json['summary'];
     attention = json['attention'];
     meetingInfo = json['meetingInfo'];
-    start = LocalDateTime.dateTime(DateTime.parse(json['iStart']));
-    end = LocalDateTime.dateTime(DateTime.parse(json['iEnd']));
+    start = Helpers.localDateTime(DateTime.parse(json['iStart']));
+    end = Helpers.localDateTime(DateTime.parse(json['iEnd']));
     atts = json['atts'].cast<int>();
     id = json['id'];
   }

@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:han4you/models/xedule/appointment.dart';
+import 'package:han4you/models/xedule/group.dart';
 import 'package:han4you/providers/agenda-provider.dart';
+import 'package:han4you/providers/group-provider.dart';
 import 'package:provider/provider.dart';
 import 'package:time_machine/time_machine.dart';
 import 'package:timetable/src/content/timetable_content.dart';
@@ -15,6 +18,7 @@ class Appointments extends StatefulWidget {
 
 class _AppointmentsState extends State<Appointments> {
   AgendaProvider _agendaProvider;
+  GroupProvider _groupProvider;
   EventProvider<BasicEvent> _eventProvider;
   TimetableController _timetableController;
   StreamController<List<BasicEvent>> _eventController =
@@ -37,17 +41,25 @@ class _AppointmentsState extends State<Appointments> {
   }
 
   void _updateEvents() {
+    String hourPattern = 'hh:mm';
     List<BasicEvent> events = [];
 
     for (Appointment appointment in _agendaProvider.appointments) {
       if (events.where((e) => e.id == appointment.id).length > 0) continue;
 
+
+      //TODO: refactor this to make it more readable
+      Group group = _groupProvider.selectedGroups
+          .firstWhere((g) => appointment.atts.contains(int.parse(g.id)));
+      Random random = Random(int.parse(group.id));
+
       BasicEvent event = BasicEvent(
         id: appointment.id,
-        title: appointment.name,
+        title:
+            '${appointment.name} - ${appointment.start.toString(hourPattern)}-${appointment.end.toString(hourPattern)}\n${group.code}',
         start: appointment.start,
         end: appointment.end,
-        color: Colors.red,
+        color: Colors.accents[random.nextInt(Colors.accents.length)],
       );
 
       events.add(event);
@@ -59,6 +71,7 @@ class _AppointmentsState extends State<Appointments> {
   @override
   void initState() {
     _agendaProvider = context.read<AgendaProvider>();
+    _groupProvider = context.read<GroupProvider>();
 
     _eventProvider = EventProvider.simpleStream(_eventController.stream);
     _timetableController = TimetableController<BasicEvent>(
