@@ -103,15 +103,14 @@ class _AuthPageState extends State<AuthPage> {
                 _webViewController = controller;
               },
               onPageFinished: (String url) async {
-                if (url == Commons.xeduleSSOUrl) {
+                if (url.startsWith('https://login.microsoftonline.com/')) {
                   setState(() {
                     _loading = false;
                   });
+                } else if (url == 'https://sa-han.xedule.nl/') {
+                  List<Cookie> cookies = await _getCookies();
+                  _doLogin(cookies);
                 }
-                if (url != 'https://sa-han.xedule.nl/') return;
-
-                List<Cookie> cookies = await _getCookies();
-                _doLogin(cookies);
               },
             ),
             loader,
