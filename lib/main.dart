@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:han4you/providers/agenda-provider.dart';
+import 'package:han4you/providers/facility-provider.dart';
 import 'package:han4you/providers/group-provider.dart';
 import 'package:han4you/providers/period-provider.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await TimeMachine.initialize({'rootBundle': rootBundle});
   await initializeDateFormatting();
-  
+
   runApp(
     MultiProvider(
       providers: [
@@ -31,7 +32,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
         ChangeNotifierProvider(create: (_) => PeriodProvider()),
         ChangeNotifierProvider(create: (_) => GroupProvider()),
-        ChangeNotifierProvider(create: (_) => AgendaProvider())
+        ChangeNotifierProvider(create: (_) => AgendaProvider()),
+        ChangeNotifierProvider(create: (_) => FacilityProvider()),
       ],
       child: App(),
     ),

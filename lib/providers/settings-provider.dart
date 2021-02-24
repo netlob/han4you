@@ -12,7 +12,7 @@ class SettingsProvider extends ChangeNotifier {
   void initSettings() async {
     final prefs = await _prefs;
     final themeMode =
-        prefs.getBool("darkTheme") ?? false ? ThemeMode.dark : ThemeMode.light;
+        prefs.getBool('darkTheme') ?? false ? ThemeMode.dark : ThemeMode.light;
     setThemeMode(themeMode);
   }
 
@@ -21,6 +21,6 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
 
     final prefs = await _prefs;
-    prefs.setBool("darkTheme", themeMode == ThemeMode.dark);
+    prefs.setBool('darkTheme', themeMode == ThemeMode.dark);
   }
 }
