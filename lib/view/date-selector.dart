@@ -8,12 +8,12 @@ import 'package:time_machine/time_machine.dart';
 
 typedef void OnDaySelected(DateTime date);
 
-class Calendar extends StatefulWidget {
+class DateSelector extends StatefulWidget {
   @override
-  _CalendarState createState() => _CalendarState();
+  _DateSelectorState createState() => _DateSelectorState();
 }
 
-class _CalendarState extends State<Calendar> {
+class _DateSelectorState extends State<DateSelector> {
   AgendaProvider _agendaProvider;
   CalendarController _calendarController;
 
@@ -66,6 +66,7 @@ class _CalendarState extends State<Calendar> {
           ),
           weekendDays: [],
           initialCalendarFormat: CalendarFormat.week,
+          initialSelectedDay: _agendaProvider.date.toDateTimeUnspecified(),
           onDaySelected: (date, _, __) {
             _agendaProvider.setDate(Helpers.localDate(date));
           },
@@ -76,6 +77,7 @@ class _CalendarState extends State<Calendar> {
           onTap: () {
             _agendaProvider.setDate(LocalDate.today());
           },
+          color: Theme.of(context).primaryColor
         ),
       ],
     );

@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 class BarButton extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
+  final Color color;
 
-  BarButton(this.title, {this.onTap});
+  BarButton(this.title, {this.onTap, this.color});
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Theme.of(context).primaryColor,
+      color: this.color ?? Theme.of(context).accentColor,
       child: Ink(
         height: 50,
         child: InkWell(

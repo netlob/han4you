@@ -26,11 +26,11 @@ class _OutagesTabState extends State<OutagesTab> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Header(title: 'Storingen', subtitle: 'storingen van HAN systemenen'),
+        Header(title: 'Storingen', subtitle: 'storingen van HAN systemen '),
         TabBar(
           controller: _tabController,
           labelColor: Theme.of(context).primaryColor,
-          unselectedLabelColor: Theme.of(context).accentColor,
+          unselectedLabelColor: Theme.of(context).primaryColor.withOpacity(0.5),
           tabs: [
             Tab(
               icon: Icon(

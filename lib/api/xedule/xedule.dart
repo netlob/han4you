@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:han4you/api/exceptions/unauthenticated-exception.dart';
 import 'package:han4you/models/xedule/appointment.dart';
+import 'package:han4you/models/xedule/facility.dart';
 import 'package:han4you/models/xedule/group.dart';
 import 'package:han4you/models/xedule/period.dart';
 import 'package:han4you/utils/helpers.dart';
@@ -40,12 +41,17 @@ class Xedule {
   }
 
   Future<List<Group>> fetchGroups() async {
-    String body = await get("group");
+    String body = await get('group');
     return await compute(Group.decodeListFromBody, body);
   }
 
   Future<List<Period>> fetchPeriods() async {
-    String body = await get("year");
+    String body = await get('year');
     return await compute(Period.decodeListFromBody, body);
+  }
+
+  Future<List<Facility>> fetchFacilities() async {
+    String body = await get('facility');
+    return await compute(Facility.decodeListFromBody, body);
   }
 }

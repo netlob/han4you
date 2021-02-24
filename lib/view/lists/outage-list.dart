@@ -30,6 +30,9 @@ class _BuildingListState extends State<OutageList> {
     return GenericFutureBuilder<List<Outage>>(
       future: _outagesFuture,
       builder: (outages) {
+        if (outages.length == 0)
+          return Center(child: Text('geen storingen :D'));
+
         return ListView.builder(
           itemCount: outages.length,
           itemBuilder: (_, index) {

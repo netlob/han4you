@@ -19,7 +19,7 @@ class _SettingsTabState extends State<SettingsTab> {
 
   @override
   Widget build(BuildContext context) {
-    bool authenticated = context.watch<XeduleProvider>().authenticated;
+    XeduleProvider xeduleProvider = context.watch<XeduleProvider>();
 
     return Column(
       children: [
@@ -36,7 +36,7 @@ class _SettingsTabState extends State<SettingsTab> {
         ListTile(
           title: Text('Beheer groepen'),
           leading: Icon(Icons.group),
-          enabled: authenticated,
+          enabled: xeduleProvider.authenticated,
           onTap: () {
             Navigator.push(
               context,
@@ -44,6 +44,14 @@ class _SettingsTabState extends State<SettingsTab> {
                 builder: (context) => GroupPage(),
               ),
             );
+          },
+        ),
+        ListTile(
+          title: Text('Log uit'),
+          leading: Icon(Icons.logout),
+          enabled: xeduleProvider.authenticated,
+          onTap: () {
+            xeduleProvider.setAuthenticated(false);
           },
         ),
         Divider(),

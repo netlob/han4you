@@ -42,7 +42,6 @@ class Appointment {
   }
 
   Appointment.fromJson(Map<String, dynamic> json) {
-
     name = json['name'];
     summary = json['summary'];
     attention = json['attention'];

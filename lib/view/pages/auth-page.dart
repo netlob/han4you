@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:han4you/api/exceptions/cookie-not-found-exception.dart';
 import 'package:han4you/api/xedule/xedule-config.dart';
+import 'package:han4you/providers/facility-provider.dart';
 import 'package:han4you/providers/period-provider.dart';
 import 'package:han4you/providers/xedule-provider.dart';
 import 'package:han4you/utils/commons.dart';
@@ -16,8 +17,47 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  bool _loading = true;
   WebViewController _webViewController;
   WebviewCookieManager _webViewCookieManager;
+
+  Future<List<Cookie>> _getCookies() async {
+    return await _webViewCookieManager.getCookies('https://sa-han.xedule.nl/');
+  }
+
+  void _doLogin(List<Cookie> cookies) async {
+    Cookie userId = cookies.singleWhere((c) => c.name == 'User');
+    Cookie sessionId = cookies.singleWhere(
+      (c) => c.name == 'ASP.NET_SessionId',
+    );
+
+    if (userId == null) throw CookieNotFoundException('User');
+    if (sessionId == null) throw CookieNotFoundException('ASP.NET_SessionId');
+    await _webViewController.loadUrl("about:blank");
+
+    setState(() {
+      _loading = true;
+    });
+
+    XeduleConfig config = XeduleConfig(
+      userId: userId.value,
+      sessionId: sessionId.value,
+    );
+
+    XeduleProvider xeduleProvider = context.read<XeduleProvider>();
+    xeduleProvider.setConfig(config);
+    xeduleProvider.setAuthenticated(true);
+
+    PeriodProvider periodProvider = context.read<PeriodProvider>();
+    FacilityProvider facilityProvider = context.read<FacilityProvider>();
+    final facilities = await xeduleProvider.xedule.fetchFacilities();
+    final periods = await xeduleProvider.xedule.fetchPeriods();
+
+    periodProvider.setPeriods(periods);
+    facilityProvider.setFacilities(facilities);
+
+    Navigator.pop(context);
+  }
 
   @override
   void initState() {
@@ -32,50 +72,50 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
+    Widget floatingActionButton = _loading
+        ? SizedBox.shrink()
+        : FloatingActionButton(
+            child: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            foregroundColor: Colors.white,
+          );
+
+    Widget loader = _loading
+        ? Container(
+            color: Colors.white,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        : SizedBox.shrink();
+
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        foregroundColor: Colors.white,
-      ),
+      floatingActionButton: floatingActionButton,
       body: SafeArea(
-        child: WebView(
-          initialUrl: Commons.xeduleSSOUrl,
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (controller) {
-            _webViewController = controller;
-          },
-          onPageFinished: (String url) async {
-            if (url != 'https://sa-han.xedule.nl/') return;
+        child: Stack(
+          children: [
+            WebView(
+              initialUrl: Commons.xeduleSSOUrl,
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (controller) async {
+                _webViewController = controller;
+              },
+              onPageFinished: (String url) async {
+                if (url == Commons.xeduleSSOUrl) {
+                  setState(() {
+                    _loading = false;
+                  });
+                }
+                if (url != 'https://sa-han.xedule.nl/') return;
 
-            List<Cookie> cookies = await _webViewCookieManager.getCookies(url);
-            Cookie userId = cookies.singleWhere((c) => c.name == 'User');
-            Cookie sessionId = cookies.singleWhere(
-              (c) => c.name == 'ASP.NET_SessionId',
-            );
-
-            if (userId == null) throw CookieNotFoundException('User');
-            if (sessionId == null)
-              throw CookieNotFoundException('ASP.NET_SessionId');
-
-            XeduleConfig config = XeduleConfig(
-              userId: userId.value,
-              sessionId: sessionId.value,
-            );
-
-            PeriodProvider periodProvider = context.read<PeriodProvider>();
-            XeduleProvider xeduleProvider = context.read<XeduleProvider>();
-            xeduleProvider.setConfig(config);
-
-            Navigator.pop(context);
-
-            xeduleProvider.xedule.fetchPeriods().then((periods) {
-              periodProvider.setPeriods(periods);
-              xeduleProvider.setAuthenticated(true);
-            });
-          },
+                List<Cookie> cookies = await _getCookies();
+                _doLogin(cookies);
+              },
+            ),
+            loader,
+          ],
         ),
       ),
     );
