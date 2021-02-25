@@ -1,6 +1,9 @@
 class XeduleConfig {
+  String endpoint;
   String userId;
   String sessionId;
 
-  XeduleConfig({this.userId, this.sessionId});
+  XeduleConfig({this.endpoint, this.userId, this.sessionId});
 }
+
+class XeduleConfigEmpty extends XeduleConfig {}

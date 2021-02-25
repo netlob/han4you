@@ -11,17 +11,16 @@ import 'package:time_machine/time_machine.dart' as time_machine;
 import 'xedule-config.dart';
 
 class Xedule {
-  String endpoint;
   XeduleConfig config;
 
-  Xedule({this.endpoint, this.config});
+  Xedule({this.config});
 
   Future<String> get(String url) async {
     final headers = {
       'Cookie': 'ASP.NET_SessionId=${config.sessionId}; User=${config.userId}'
     };
 
-    final res = await http.get(endpoint + url, headers: headers);
+    final res = await http.get(config.endpoint + url, headers: headers);
     if(res.body == '') throw UnauthenticatedException('no response body');
     return res.body;
   }

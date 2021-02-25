@@ -40,13 +40,13 @@ class _AuthPageState extends State<AuthPage> {
     });
 
     XeduleConfig config = XeduleConfig(
+      endpoint: Commons.xeduleEndpoint,
       userId: userId.value,
       sessionId: sessionId.value,
     );
 
     XeduleProvider xeduleProvider = context.read<XeduleProvider>();
     xeduleProvider.setConfig(config);
-    xeduleProvider.setAuthenticated(true);
 
     PeriodProvider periodProvider = context.read<PeriodProvider>();
     FacilityProvider facilityProvider = context.read<FacilityProvider>();
@@ -97,17 +97,17 @@ class _AuthPageState extends State<AuthPage> {
         child: Stack(
           children: [
             WebView(
-              initialUrl: Commons.xeduleSSOUrl,
+              initialUrl: Commons.xeduleSSO,
               javascriptMode: JavascriptMode.unrestricted,
               onWebViewCreated: (controller) async {
                 _webViewController = controller;
               },
               onPageFinished: (String url) async {
-                if (url.startsWith('https://login.microsoftonline.com/')) {
+                if (url.startsWith(Commons.microsoftBase)) {
                   setState(() {
                     _loading = false;
                   });
-                } else if (url == 'https://sa-han.xedule.nl/') {
+                } else if (url == Commons.xeduleBase) {
                   List<Cookie> cookies = await _getCookies();
                   _doLogin(cookies);
                 }

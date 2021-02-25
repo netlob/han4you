@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/api/exceptions/unauthenticated-exception.dart';
+import 'package:han4you/api/xedule/xedule-config.dart';
 import 'package:han4you/providers/agenda-provider.dart';
 import 'package:han4you/providers/group-provider.dart';
 import 'package:han4you/providers/period-provider.dart';
@@ -42,7 +43,7 @@ class _AgendaTabState extends State<AgendaTab> {
       return;
     }).catchError((exception) {
       if (exception is UnauthenticatedException) {
-        _xeduleProvider.setAuthenticated(false);
+        _xeduleProvider.setConfig(XeduleConfigEmpty());
       }
     });
   }

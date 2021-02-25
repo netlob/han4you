@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:han4you/api/xedule/xedule-config.dart';
 import 'package:han4you/providers/settings-provider.dart';
 import 'package:han4you/providers/xedule-provider.dart';
 import 'package:han4you/view/header.dart';
@@ -51,7 +52,7 @@ class _SettingsTabState extends State<SettingsTab> {
           leading: Icon(Icons.logout),
           enabled: xeduleProvider.authenticated,
           onTap: () {
-            xeduleProvider.setAuthenticated(false);
+            xeduleProvider.setConfig(XeduleConfigEmpty());
           },
         ),
         Divider(),
