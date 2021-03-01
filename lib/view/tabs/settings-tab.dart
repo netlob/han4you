@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:han4you/api/xedule/xedule-config.dart';
 import 'package:han4you/providers/settings-provider.dart';
 import 'package:han4you/providers/xedule-provider.dart';
 import 'package:han4you/view/header.dart';
@@ -21,23 +20,24 @@ class _SettingsTabState extends State<SettingsTab> {
   @override
   Widget build(BuildContext context) {
     XeduleProvider xeduleProvider = context.watch<XeduleProvider>();
+    SettingsProvider settingsProvider = context.watch<SettingsProvider>();
 
     return Column(
       children: [
         Header(title: 'Instellingen', subtitle: 'instellingen van de app'),
         SwitchListTile(
-          value: context.watch<SettingsProvider>().themeMode == ThemeMode.dark,
+          value: settingsProvider.darkTheme,
           title: const Text('Donker thema'),
-          onChanged: (value) {
-            final themeMode = value ? ThemeMode.dark : ThemeMode.light;
-            context.read<SettingsProvider>().setThemeMode(themeMode);
+          onChanged: (darkTheme) {
+            settingsProvider.setDarkTheme(darkTheme);
+            settingsProvider.save();
           },
           secondary: const Icon(Icons.color_lens_outlined),
         ),
         ListTile(
           title: Text('Beheer groepen'),
           leading: Icon(Icons.group),
-          enabled: xeduleProvider.authenticated,
+          enabled: xeduleProvider.xedule.config.authenticated,
           onTap: () {
             Navigator.push(
               context,
@@ -50,9 +50,10 @@ class _SettingsTabState extends State<SettingsTab> {
         ListTile(
           title: Text('Log uit'),
           leading: Icon(Icons.logout),
-          enabled: xeduleProvider.authenticated,
+          enabled: xeduleProvider.xedule.config.authenticated,
           onTap: () {
-            xeduleProvider.setConfig(XeduleConfigEmpty());
+            xeduleProvider.resetConfig();
+            xeduleProvider.save();
           },
         ),
         Divider(),

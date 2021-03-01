@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:han4you/api/exceptions/cookie-not-found-exception.dart';
 import 'package:han4you/api/xedule/xedule-config.dart';
-import 'package:han4you/providers/facility-provider.dart';
-import 'package:han4you/providers/period-provider.dart';
 import 'package:han4you/providers/xedule-provider.dart';
 import 'package:han4you/utils/commons.dart';
 import 'package:provider/provider.dart';
@@ -39,22 +37,15 @@ class _AuthPageState extends State<AuthPage> {
       _loading = true;
     });
 
+    XeduleProvider xeduleProvider = context.read<XeduleProvider>();
+
     XeduleConfig config = XeduleConfig(
       endpoint: Commons.xeduleEndpoint,
       userId: userId.value,
       sessionId: sessionId.value,
     );
-
-    XeduleProvider xeduleProvider = context.read<XeduleProvider>();
     xeduleProvider.setConfig(config);
-
-    PeriodProvider periodProvider = context.read<PeriodProvider>();
-    FacilityProvider facilityProvider = context.read<FacilityProvider>();
-    final facilities = await xeduleProvider.xedule.fetchFacilities();
-    final periods = await xeduleProvider.xedule.fetchPeriods();
-
-    periodProvider.setPeriods(periods);
-    facilityProvider.setFacilities(facilities);
+    xeduleProvider.save();
 
     Navigator.pop(context);
   }

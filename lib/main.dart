@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:han4you/providers/agenda-provider.dart';
+import 'package:han4you/providers/appointment-provider.dart';
+import 'package:han4you/providers/date-provider.dart';
+import 'package:han4you/providers/event-provider.dart';
 import 'package:han4you/providers/facility-provider.dart';
 import 'package:han4you/providers/group-provider.dart';
 import 'package:han4you/providers/period-provider.dart';
@@ -32,8 +34,10 @@ void main() async {
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
         ChangeNotifierProvider(create: (_) => PeriodProvider()),
         ChangeNotifierProvider(create: (_) => GroupProvider()),
-        ChangeNotifierProvider(create: (_) => AgendaProvider()),
         ChangeNotifierProvider(create: (_) => FacilityProvider()),
+        ChangeNotifierProvider(create: (_) => DateProvider()),
+        ChangeNotifierProvider(create: (_) => AppointmentProvider()),
+        ChangeNotifierProvider(create: (_) => EventProvider()),
       ],
       child: App(),
     ),
@@ -56,11 +60,13 @@ class AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    bool darkTheme = context.watch<SettingsProvider>().darkTheme;
+
     return MaterialApp(
       title: 'han4you',
       theme: Commons.lightTheme,
       darkTheme: Commons.darkTheme,
-      themeMode: context.watch<SettingsProvider>().themeMode,
+      themeMode: darkTheme ? ThemeMode.dark : ThemeMode.light,
       home: Scaffold(
         body: SafeArea(child: _tabs[_index]),
         bottomNavigationBar: BottomNavigationBar(

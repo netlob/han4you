@@ -1,0 +1,63 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:han4you/api/exceptions/unauthenticated-exception.dart';
+import 'package:han4you/models/xedule/appointment.dart';
+import 'package:han4you/providers/date-provider.dart';
+import 'package:han4you/providers/group-provider.dart';
+import 'package:han4you/providers/period-provider.dart';
+import 'package:han4you/providers/xedule-provider.dart';
+import 'package:han4you/utils/helpers.dart';
+import 'package:provider/provider.dart';
+
+class AppointmentProvider extends ChangeNotifier {
+  bool loading = false;
+  List<int> weeksDownloaded = [];
+  List<Appointment> appointments = [];
+
+  void fetchAppointments(BuildContext context) async {
+    final xeduleProvider = context.read<XeduleProvider>();
+    final periodProvider = context.read<PeriodProvider>();
+    final groupProvider = context.read<GroupProvider>();
+    final dateProvider = context.read<DateProvider>();
+
+    int weekNumber = Helpers.weekNumber(dateProvider.date);
+    if(weeksDownloaded.contains(weekNumber)) return;
+
+    loading = true;
+    notifyListeners();
+
+    try {
+      if (periodProvider.periods.length == 0) {
+        await periodProvider.fetchPeriods(context);
+      }
+
+      final appointments = await xeduleProvider.xedule.fetchAppointments(
+        groupProvider.selectedGroups,
+        periodProvider.periods,
+        weekNumber,
+      );
+      loading = false;
+      addAppointments(appointments);
+      weeksDownloaded.add(weekNumber);
+    } catch (exception) {
+      if (exception is UnauthenticatedException) {
+        xeduleProvider.resetConfig();
+        xeduleProvider.save();
+      } else {
+        throw exception;
+      }
+
+      loading = false;
+      notifyListeners();
+    }
+  }
+
+  void addAppointments(List<Appointment> appointments) {
+    for (final appointment in appointments) {
+      this.appointments.removeWhere((a) => a.id == appointment.id);
+      this.appointments.add(appointment);
+    }
+
+    notifyListeners();
+  }
+}

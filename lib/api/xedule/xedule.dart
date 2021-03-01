@@ -4,9 +4,7 @@ import 'package:han4you/models/xedule/appointment.dart';
 import 'package:han4you/models/xedule/facility.dart';
 import 'package:han4you/models/xedule/group.dart';
 import 'package:han4you/models/xedule/period.dart';
-import 'package:han4you/utils/helpers.dart';
 import 'package:http/http.dart' as http;
-import 'package:time_machine/time_machine.dart' as time_machine;
 
 import 'xedule-config.dart';
 
@@ -25,14 +23,12 @@ class Xedule {
     return res.body;
   }
 
-  Future<List<Appointment>> fetchAppointments(List<Group> groups, List<Period> periods, time_machine.LocalDate date) async {
-    int weekNum = Helpers.weekNumber(date);
-
+  Future<List<Appointment>> fetchAppointments(List<Group> groups, List<Period> periods, int weekNumber) async {
     String ids = '';
     for(int i = 0; i < groups.length; i++) {
       Group group = groups[i];
       Period period = periods.firstWhere((p) => group.orus.contains(p.oru));
-      ids += 'ids[$i]=${period.cal}_${weekNum}_${group.id}&';
+      ids += 'ids[$i]=${period.cal}_${weekNumber}_${group.id}&';
     }
 
     String body = await get('schedule/?$ids');

@@ -59,6 +59,8 @@ class _GroupListState extends State<GroupList> {
                 } else {
                   groupProvider.removeSelectedGroup(group);
                 }
+
+                groupProvider.save();
               },
             );
           },

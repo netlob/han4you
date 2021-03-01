@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:han4you/providers/agenda-provider.dart';
+import 'package:han4you/providers/date-provider.dart';
 import 'package:han4you/utils/helpers.dart';
 import 'package:han4you/view/bar-button.dart';
 import 'package:provider/provider.dart';
@@ -14,30 +14,30 @@ class DateSelector extends StatefulWidget {
 }
 
 class _DateSelectorState extends State<DateSelector> {
-  AgendaProvider _agendaProvider;
+  DateProvider _dateProvider;
   CalendarController _calendarController;
 
   void _onDateChanged() {
     setState(() {
       _calendarController.setSelectedDay(
-        _agendaProvider.date.toDateTimeUnspecified(),
+        _dateProvider.date.toDateTimeUnspecified(),
       );
     });
   }
 
   @override
   void initState() {
-    _agendaProvider = context.read<AgendaProvider>();
-    _calendarController = CalendarController();
-    _agendaProvider.addListener(_onDateChanged);
+    _dateProvider = context.read<DateProvider>();
+    _dateProvider.addListener(_onDateChanged);
 
+    _calendarController = CalendarController();
     super.initState();
   }
 
   @override
   void dispose() {
     _calendarController.dispose();
-    _agendaProvider.removeListener(_onDateChanged);
+    _dateProvider.removeListener(_onDateChanged);
     super.dispose();
   }
 
@@ -66,16 +66,16 @@ class _DateSelectorState extends State<DateSelector> {
           ),
           weekendDays: [],
           initialCalendarFormat: CalendarFormat.week,
-          initialSelectedDay: _agendaProvider.date.toDateTimeUnspecified(),
+          initialSelectedDay: _dateProvider.date.toDateTimeUnspecified(),
           onDaySelected: (date, _, __) {
-            _agendaProvider.setDate(Helpers.localDate(date));
+            _dateProvider.setDate(Helpers.localDate(date));
           },
           startingDayOfWeek: StartingDayOfWeek.monday,
         ),
         BarButton(
           "ga naar vandaag",
           onTap: () {
-            _agendaProvider.setDate(LocalDate.today());
+            _dateProvider.setDate(LocalDate.today());
           },
           color: Theme.of(context).primaryColor
         ),
