@@ -1,6 +1,6 @@
 import 'package:time_machine/time_machine.dart';
 
-class Helpers {
+class TimeMachineUtils {
   static int weekNumber(LocalDate date) {
     int dayOfYear = date.dayOfYear;
     return ((dayOfYear - date.dayOfWeek.value + 10) / 7).floor();

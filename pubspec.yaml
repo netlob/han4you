@@ -1,7 +1,7 @@
 name: han4you
 description: Een moderne versie van de han4you app!
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 0.9.0+1
+version: 1.0.0+1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/providers/group-provider.dart';
 import 'package:han4you/providers/xedule-provider.dart';
+import 'package:han4you/view/header.dart';
+import 'package:han4you/view/pages/auth-page.dart';
+import 'package:han4you/view/pages/group-page.dart';
 import 'package:provider/provider.dart';
 
-import 'header.dart';
-import 'pages/auth-page.dart';
-import 'pages/group-page.dart';
-
-class AuthenticationSteps extends StatelessWidget {
+class AuthTab extends StatelessWidget {
   void _openPage(Widget page, BuildContext context) {
     Navigator.push(
       context,
@@ -34,7 +33,7 @@ class AuthenticationSteps extends StatelessWidget {
             label: Text('Log in met HAN sso'),
             icon: Icon(Icons.login),
             onPressed:
-                !authenticated ? () => _openPage(AuthPage(), context) : null,
+            !authenticated ? () => _openPage(AuthPage(), context) : null,
           ),
         ),
         FractionallySizedBox(

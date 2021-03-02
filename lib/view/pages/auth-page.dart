@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:han4you/api/exceptions/cookie-not-found-exception.dart';
 import 'package:han4you/api/xedule/xedule-config.dart';
 import 'package:han4you/providers/xedule-provider.dart';
-import 'package:han4you/utils/commons.dart';
+import 'file:///C:/Users/idiidk/StudioProjects/han4you/lib/commons.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';

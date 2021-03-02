@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/models/xedule/group.dart';
+import 'package:han4you/providers/appointment-provider.dart';
 import 'package:han4you/providers/group-provider.dart';
 import 'package:han4you/providers/xedule-provider.dart';
 import 'package:han4you/view/generic-future-builder.dart';
@@ -32,8 +33,9 @@ class _GroupListState extends State<GroupList> {
 
   @override
   Widget build(BuildContext context) {
-    GroupProvider groupProvider = context.watch<GroupProvider>();
-    List<Group> selectedGroups = groupProvider.selectedGroups;
+    final appointmentProvider = context.watch<AppointmentProvider>();
+    final groupProvider = context.watch<GroupProvider>();
+    final selectedGroups = groupProvider.selectedGroups;
 
     return GenericFutureBuilder<List<Group>>(
       future: _groupFuture,
@@ -60,6 +62,7 @@ class _GroupListState extends State<GroupList> {
                   groupProvider.removeSelectedGroup(group);
                 }
 
+                appointmentProvider.clear();
                 groupProvider.save();
               },
             );

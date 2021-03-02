@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:han4you/utils/helpers.dart';
+import 'package:han4you/utils/time-machine-utils.dart';
 import 'package:time_machine/time_machine.dart';
 
 class Appointment {
@@ -46,8 +46,8 @@ class Appointment {
     summary = json['summary'];
     attention = json['attention'];
     meetingInfo = json['meetingInfo'];
-    start = Helpers.localDateTime(DateTime.parse(json['iStart']));
-    end = Helpers.localDateTime(DateTime.parse(json['iEnd']));
+    start = TimeMachineUtils.localDateTime(DateTime.parse(json['iStart']));
+    end = TimeMachineUtils.localDateTime(DateTime.parse(json['iEnd']));
     atts = json['atts'].cast<int>();
     id = json['id'];
   }

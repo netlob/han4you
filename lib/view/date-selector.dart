@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/providers/date-provider.dart';
-import 'package:han4you/utils/helpers.dart';
+import 'package:han4you/utils/time-machine-utils.dart';
 import 'package:han4you/view/bar-button.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -68,7 +68,7 @@ class _DateSelectorState extends State<DateSelector> {
           initialCalendarFormat: CalendarFormat.week,
           initialSelectedDay: _dateProvider.date.toDateTimeUnspecified(),
           onDaySelected: (date, _, __) {
-            _dateProvider.setDate(Helpers.localDate(date));
+            _dateProvider.setDate(TimeMachineUtils.localDate(date));
           },
           startingDayOfWeek: StartingDayOfWeek.monday,
         ),

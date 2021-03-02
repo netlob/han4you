@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:han4you/models/xedule/group.dart';
+import 'package:han4you/providers/appointment-provider.dart';
 import 'package:han4you/providers/group-provider.dart';
 import 'package:han4you/providers/xedule-provider.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +13,9 @@ class FollowingGroupList extends StatefulWidget {
 class _FollowingGroupListState extends State<FollowingGroupList> {
   @override
   Widget build(BuildContext context) {
-    final xeduleProvider = context.watch<XeduleProvider>();
     final groupProvider = context.watch<GroupProvider>();
+    final xeduleProvider = context.watch<XeduleProvider>();
+    final appointmentProvider = context.watch<AppointmentProvider>();
     final groups = groupProvider.selectedGroups;
 
     if (!xeduleProvider.xedule.config.authenticated) return SizedBox.shrink();
@@ -28,6 +30,8 @@ class _FollowingGroupListState extends State<FollowingGroupList> {
           onDismissed: (_) {
             setState(() {
               groupProvider.removeSelectedGroup(group);
+              groupProvider.save();
+              appointmentProvider.clear();
             });
           },
           child: ListTile(
